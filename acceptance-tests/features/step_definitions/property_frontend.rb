@@ -61,9 +61,11 @@ Then(/^I get a page not found message$/) do
 end
 
 Then(/^I see the map to the correct coordinates$/) do
+  latitude  = "50.709895171253535"
+  longitude = "-3.509209803044564"
   map = page.find('//*[@id="content"]/div[1]/div[3]/div/div[2]/img')
-  expect(map['src']).to include(@property_data['position_x'])
-  expect(map['src']).to include(@property_data['position_y'])
+  expect(map['src']).to include(latitude)
+  expect(map['src']).to include(longitude)
 end
 
 Given(/^I have a property that does not have location coordinates$/) do
@@ -84,8 +86,9 @@ end
 
 #this checks that there is a link and it is named correct on the page
 Then(/^a hyperlink to LR statutory services should be available$/) do
-  @link = page.find('//*[@id="content"]/div[2]/p/a')
-  expect(@link.text).to eq ("here")
+  # find the link inside the paragraph which mentions the LR statutory services
+  # this will fail if the link does not exist
+  @link = page.find("//p[contains(.,'Access the Land Registry service')]/a")
 end
 
 When(/^I click the LR Statutory services link$/) do
@@ -95,4 +98,14 @@ end
 #this checks that the link points to the correct page
 Then(/^I am taken to the Find a Property service$/) do
   expect(@link["href"]).to eq("https://www.gov.uk/search-property-information-land-registry")
+end
+
+Then(/^the Address and Map copyright disclaimer should be displayed$/) do
+  # find the link with text about the terms and conditions
+  @link = page.find("//a[text()='Use of this addressing data is subject to terms and conditions']")
+  expect(@link["href"]).to eq("/property/copyright_notices")
+  @link.click
+  expect(page.body.text).to include ("You are granted a non-exclusive, royalty free, revocable licence solely to view the Licensed Data for non-commercial purposes for the period during which [insert name of Licensee] makes it available;")
+  expect(page.body.text).to include ("You are not permitted to copy, sub-license, distribute, sell or otherwise make available the Licensed Data to third parties in any form;")
+  expect(page.body.text).to include ("Third party rights to enforce the terms of this licence shall be reserved to Ordnance Survey;")
 end
