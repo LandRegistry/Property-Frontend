@@ -86,8 +86,9 @@ end
 
 #this checks that there is a link and it is named correct on the page
 Then(/^a hyperlink to LR statutory services should be available$/) do
-  @link = page.find('//*[@id="content"]/div[2]/p/a')
-  expect(@link.text).to eq ("here")
+  # find the link inside the paragraph which mentions the LR statutory services
+  # this will fail if the link does not exist
+  @link = page.find("//p[contains(.,'Access the Land Registry service')]/a")
 end
 
 When(/^I click the LR Statutory services link$/) do
@@ -100,10 +101,9 @@ Then(/^I am taken to the Find a Property service$/) do
 end
 
 Then(/^the Address and Map copyright disclaimer should be displayed$/) do
-  #@link = page.find('//'[@class='js-enabled']/footer[@id='footer']/div[@class='footer-wrapper']/div[@class='footer-meta']/div[@class='footer-meta-inner']/ul[1]/li/a)
-  @link = page.find('//*[@class="js-enabled"]/footer[@id="footer"]/div[@class="footer-wrapper"]/div[@class="footer-meta"]/div[@class="footer-meta-inner"]/ul[1]/li/a')
-  #expect(@link.text).to eq ("Use of this addressing data is subject to terms and conditions")
-  expect(@link["href"]).to eq("/properties/copyright_notices")
+  # find the link with text about the terms and conditions
+  @link = page.find("//a[text()='Use of this addressing data is subject to terms and conditions']")
+  expect(@link["href"]).to eq("/property/copyright_notices")
   @link.click
   expect(page.body.text).to include ("You are granted a non-exclusive, royalty free, revocable licence solely to view the Licensed Data for non-commercial purposes for the period during which [insert name of Licensee] makes it available;")
   expect(page.body.text).to include ("You are not permitted to copy, sub-license, distribute, sell or otherwise make available the Licensed Data to third parties in any form;")
