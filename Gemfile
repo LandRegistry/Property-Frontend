@@ -54,4 +54,6 @@ end
 group :production do
   gem 'therubyracer'
   gem 'rb-readline'
+  gem 'unicorn'
+  gem 'unicorn-rails'
 end
