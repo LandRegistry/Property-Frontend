@@ -35,15 +35,11 @@
 
         </div>
 
-        <div class="column-half map-placeholder">
-          <% if @property[:coordinates] %>
-            <% latitude = @property[:coordinates][:lat]
-               longitude = @property[:coordinates][:lon]
-            %>
-            <img src="http://maps.google.com/maps/api/staticmap?markers=<%=latitude%>,<%=longitude%>|<%=latitude%>,<%=longitude%>&zoom=17&size=500x400">
-          <% else %>
-            <h3 class="map-unavailable">No map available</h3>
-          <% end %>
+        <script>
+        var latitude="<%= @property[:coordinates][:lat] %>";
+        var longitude="<%= @property[:coordinates][:lon] %>";
+        </script>
+        <div id='map' style='height:386px; width:480px'>
         </div>
 
       </div>
